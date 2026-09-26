@@ -316,7 +316,7 @@ bool CBagCommandObject::runObject() {
 					int y = getPosition().y;
 
 					CBofRect cRect;
-					cRect.setRect(x, y, x + 480 - 1, y + 360 - 1);
+					cRect.setRect(x, y, x + PAN_AREA_WIDTH - 1, y + PAN_AREA_HEIGHT - 1);
 					currWin->getSlideBitmap()->setCurrView(cRect);
 				}
 			}
@@ -360,7 +360,7 @@ bool CBagCommandObject::runObject() {
 			CBagMasterWin *mainWin = CBagel::getBagApp()->getMasterWnd();
 
 			if (mainWin != nullptr) {
-				CBofBitmap bmp(640, 480, CBofApp::getApp()->getPalette());
+				CBofBitmap bmp(DEF_WIDTH + 1, DEF_HEIGHT + 1, CBofApp::getApp()->getPalette());
 				bmp.fillRect(nullptr, COLOR_BLACK);
 
 				bmp.paint(mainWin, 0, 0);

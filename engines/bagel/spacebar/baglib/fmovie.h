@@ -23,7 +23,7 @@
 #ifndef BAGEL_BAGLIB_FMOVIE_H
 #define BAGEL_BAGLIB_FMOVIE_H
 
-#include "video/smk_decoder.h"
+#include "video/video_decoder.h"
 #include "bagel/spacebar/boflib/gui/dialog.h"
 #include "bagel/boflib/rect.h"
 #include "bagel/boflib/error.h"
@@ -39,7 +39,7 @@ public:
 	};
 
 protected:
-	Video::SmackerDecoder *_smk;
+	Video::VideoDecoder *_smk;
 
 	bool _escCanStopFl;
 	bool _loopFl;

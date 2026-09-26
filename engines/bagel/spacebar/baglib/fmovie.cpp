@@ -20,6 +20,8 @@
  */
 
 #include "graphics/cursorman.h"
+#include "video/avi_decoder.h"
+#include "video/smk_decoder.h"
 
 #include "bagel/spacebar/baglib/fmovie.h"
 #include "bagel/boflib/string.h"
@@ -103,8 +105,13 @@ bool CBagFMovie::openMovie(const char *sFilename) {
 	if (_smk) {
 		closeMovie();
 	}
-	_smk = new Video::SmackerDecoder();
-	_smk->setSoundType(Audio::Mixer::kSFXSoundType);
+	if (Common::String(sFilename).hasSuffixIgnoreCase(".avi")) {
+		_smk = new Video::AVIDecoder();
+	} else {
+		Video::SmackerDecoder *smk = new Video::SmackerDecoder();
+		smk->setSoundType(Audio::Mixer::kSFXSoundType);
+		_smk = smk;
+	}
 
 	// Opened failed ?
 	if (!_smk->loadFile(sFilename)) {
@@ -361,7 +368,7 @@ bool CBagFMovie::setFrame(uint32 frameNum) {
 		return false;
 
 	frameNum = CLIP<uint32>(frameNum, 0, _smk->getFrameCount() - 1);
-	_smk->forceSeekToFrame(frameNum);
+	_smk->seekToFrame(frameNum);
 	return true;
 }
 

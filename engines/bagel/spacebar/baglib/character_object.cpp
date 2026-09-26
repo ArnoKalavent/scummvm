@@ -20,6 +20,8 @@
  */
 
 #include "common/file.h"
+#include "video/avi_decoder.h"
+#include "video/smk_decoder.h"
 #include "bagel/spacebar/baglib/character_object.h"
 #include "bagel/spacebar/baglib/storage_dev_win.h"
 #include "bagel/spacebar/baglib/master_win.h"
@@ -70,9 +72,30 @@ ErrorCode CBagCharacterObject::attach() {
 
 	filename = getFileName();
 
-	// Open the smacker file
-	Video::SmackerDecoder *decoder = new Video::SmackerDecoder();
-	decoder->setSoundType(Audio::Mixer::kSFXSoundType);
+	// HD override: prefer .AVI over .SMK if found in SearchMan
+	if (filename.find(".SMK") > 0 || filename.find(".smk") > 0) {
+		const int nLen = filename.getLength();
+		if (nLen > 4) {
+			Common::String filenameAvi(filename.getBuffer(), nLen - 4);
+			filenameAvi += ".AVI";
+			if (fileExists(filenameAvi.c_str())) {
+				filename = filenameAvi.c_str();
+				logInfo(buildString("HD-VIDEO: AVI override -> %s", filename.getBuffer()));
+			} else {
+				logInfo(buildString("HD-VIDEO: no AVI, using SMK -> %s", filename.getBuffer()));
+			}
+		}
+	}
+
+	// Open the video file (AVI or SMK)
+	Video::VideoDecoder *decoder;
+	if (filename.find(".AVI") > 0 || filename.find(".avi") > 0) {
+		decoder = new Video::AVIDecoder();
+	} else {
+		Video::SmackerDecoder *smk = new Video::SmackerDecoder();
+		smk->setSoundType(Audio::Mixer::kSFXSoundType);
+		decoder = smk;
+	}
 	if (!decoder->loadFile(filename.getBuffer())) {
 		logError(buildString("char SmackOpen failed: %s ", filename.getBuffer()));
 		delete decoder;
@@ -93,6 +116,7 @@ ErrorCode CBagCharacterObject::attach() {
 	// Create the text filename
 	filename.makeUpper();
 	filename.replaceStr(".SMK", ".BIN");
+	filename.replaceStr(".AVI", ".BIN");
 
 	if (_binBuf != nullptr) {
 		bofFree(_binBuf);
@@ -604,7 +628,8 @@ void CBagCharacterObject::setFrame(int n) {
 	if (_smacker != nullptr) {
 		n--;
 		n = CLIP<int>(n, 0, _smacker->getFrameCount() - 1);
-		const Graphics::Surface *surf = _smacker->forceSeekToFrame(n);
+		_smacker->seekToFrame(n);
+		const Graphics::Surface *surf = _smacker->decodeNextFrame();
 		if (surf) {
 			Graphics::ManagedSurface &destSurf = *_bmpBuf;
 

@@ -23,7 +23,7 @@
 #ifndef BAGEL_BAGLIB_BAG_CHARACTER_OBJECT_H
 #define BAGEL_BAGLIB_BAG_CHARACTER_OBJECT_H
 
-#include "video/smk_decoder.h"
+#include "video/video_decoder.h"
 #include "bagel/spacebar/baglib/object.h"
 
 namespace Bagel {
@@ -31,7 +31,7 @@ namespace SpaceBar {
 
 class CBagCharacterObject : public CBagObject {
 protected:
-	Video::SmackerDecoder *_smacker = nullptr;
+	Video::VideoDecoder *_smacker = nullptr;
 	CBofBitmap *_bmpBuf = nullptr;
 	int _charTransColor = 0;
 

@@ -22,6 +22,7 @@
 #include "bagel/spacebar/dialogs/restore_dialog.h"
 #include "bagel/spacebar/dialogs/save_dialog.h"
 #include "bagel/spacebar/baglib/bagel.h"
+#include "bagel/spacebar/baglib/pan_window.h"
 #include "bagel/spacebar/baglib/button_object.h"
 #include "bagel/boflib/sound.h"
 #include "bagel/spacebar/dialogs/opt_window.h"
@@ -32,24 +33,24 @@
 namespace Bagel {
 namespace SpaceBar {
 
-#define DIALOG_WIDTH    640
-#define DIALOG_HEIGHT   480
+#define DIALOG_WIDTH    (640 * HD_SCALE)
+#define DIALOG_HEIGHT   (480 * HD_SCALE)
 
 // Edit Text control placement
 //
-#define EDIT_DX         330
-#define EDIT_DY         20
-#define EDIT_X          154 //((DIALOG_WIDTH - EDIT_DX) / 2)
-#define EDIT_Y          405
+#define EDIT_DX         (330 * HD_SCALE)
+#define EDIT_DY         (20 * HD_SCALE)
+#define EDIT_X          (154 * HD_SCALE) //((DIALOG_WIDTH - EDIT_DX) / 2)
+#define EDIT_Y          (405 * HD_SCALE)
 
 // List box placement
 //
 #define LIST_DX         EDIT_DX
-#define LIST_DY         200 //248
-#define LIST_X          155 //((DIALOG_WIDTH - LIST_DX) / 2)
-#define LIST_Y          72
+#define LIST_DY         (200 * HD_SCALE) //248
+#define LIST_X          (155 * HD_SCALE) //((DIALOG_WIDTH - LIST_DX) / 2)
+#define LIST_Y          (72 * HD_SCALE)
 #define LIST_TEXT_DY    EDIT_DY
-#define LIST_FONT_SIZE  12
+#define LIST_FONT_SIZE  (12 * HD_SCALE)
 
 struct ST_BUTTONS {
 	const char *_pszName;
@@ -65,14 +66,14 @@ struct ST_BUTTONS {
 };
 
 static const ST_BUTTONS g_stButtons[NUM_RESTORE_BTNS] = {
-	{ "Restore", "restorup.bmp", "restordn.bmp", "restorgr.bmp", "restorgr.bmp", 21, 400, 120, 40, RESTORE_BTN},
-	{ "Cancel", "cancelup.bmp", "canceldn.bmp", "cancelup.bmp", "cancelup.bmp", 495, 400, 120, 40, CANCEL_BTN},
+	{ "Restore", "restorup.bmp", "restordn.bmp", "restorgr.bmp", "restorgr.bmp", 21 * HD_SCALE, 400 * HD_SCALE, 120 * HD_SCALE, 40 * HD_SCALE, RESTORE_BTN},
+	{ "Cancel", "cancelup.bmp", "canceldn.bmp", "cancelup.bmp", "cancelup.bmp", 495 * HD_SCALE, 400 * HD_SCALE, 120 * HD_SCALE, 40 * HD_SCALE, CANCEL_BTN},
 
-	{ "LineUp", "lineupup.bmp", "lineupdn.bmp", "lineupup.bmp", "lineupgr.bmp", 490, 50, 25, 25, LINEUP_BTN},
-	{ "LineDn", "linednup.bmp", "linedndn.bmp", "linednup.bmp", "linedngr.bmp", 490, 250, 25, 25, LINEDN_BTN},
+	{ "LineUp", "lineupup.bmp", "lineupdn.bmp", "lineupup.bmp", "lineupgr.bmp", 490 * HD_SCALE, 50 * HD_SCALE, 25 * HD_SCALE, 25 * HD_SCALE, LINEUP_BTN},
+	{ "LineDn", "linednup.bmp", "linedndn.bmp", "linednup.bmp", "linedngr.bmp", 490 * HD_SCALE, 250 * HD_SCALE, 25 * HD_SCALE, 25 * HD_SCALE, LINEDN_BTN},
 
-	{ "PageUp", "pageupup.bmp", "pageupdn.bmp", "pageupup.bmp", "pageupgr.bmp", 490, 80, 25, 25, PAGEUP_BTN},
-	{ "PageDn", "pagednup.bmp", "pagedndn.bmp", "pagednup.bmp", "pagedngr.bmp", 490, 215, 25, 25, PAGEDN_BTN}
+	{ "PageUp", "pageupup.bmp", "pageupdn.bmp", "pageupup.bmp", "pageupgr.bmp", 490 * HD_SCALE, 80 * HD_SCALE, 25 * HD_SCALE, 25 * HD_SCALE, PAGEUP_BTN},
+	{ "PageDn", "pagednup.bmp", "pagedndn.bmp", "pagednup.bmp", "pagedngr.bmp", 490 * HD_SCALE, 215 * HD_SCALE, 25 * HD_SCALE, 25 * HD_SCALE, PAGEDN_BTN}
 };
 
 extern CBofWindow *g_hackWindow;
@@ -195,9 +196,9 @@ ErrorCode CBagRestoreDialog::attach() {
 
 		_pText = new CBofText;
 
-		cRect.setRect(170, 405, 470, 435);
+		cRect.setRect(170 * HD_SCALE, 405 * HD_SCALE, 470 * HD_SCALE, 435 * HD_SCALE);
 		_pText->setupText(&cRect, JUSTIFY_LEFT, FORMAT_CENTER_LEFT);
-		_pText->SetSize(16);
+		_pText->SetSize(16 * HD_SCALE);
 		_pText->setWeight(TEXT_BOLD);
 
 		// Set initial selected item

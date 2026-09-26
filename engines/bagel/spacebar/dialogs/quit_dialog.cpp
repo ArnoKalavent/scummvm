@@ -21,6 +21,7 @@
 
 #include "bagel/spacebar/dialogs/quit_dialog.h"
 #include "bagel/spacebar/dialogs/opt_window.h"
+#include "bagel/spacebar/baglib/pan_window.h"
 #include "bagel/spacebar/baglib/cursor.h"
 #include "bagel/spacebar/baglib/button_object.h"
 #include "bagel/spacebar/baglib/bagel.h"
@@ -44,9 +45,9 @@ struct ST_BUTTONS {
 };
 
 static const ST_BUTTONS g_stQuitButtons[NUM_QUIT_BUTTONS] = {
-	{ "Save", "SAVEQTUP.BMP", "SAVEQTDN.BMP", "SAVEQTUP.BMP", "SAVEQTUP.BMP", 220, 190, 200, 38, SAVE_BTN },
-	{ "Quit", "JUSTQTUP.BMP", "JUSTQTDN.BMP", "JUSTQTUP.BMP", "JUSTQTUP.BMP", 220, 237, 200, 38, QUIT_BTN },
-	{ "Cancel", "PLAYUP.BMP", "PLAYDN.BMP", "PLAYUP.BMP", "PLAYUP.BMP", 220, 284, 200, 38, CANCEL_BTN }
+	{ "Save", "SAVEQTUP.BMP", "SAVEQTDN.BMP", "SAVEQTUP.BMP", "SAVEQTUP.BMP", 220 * HD_SCALE, 190 * HD_SCALE, 200 * HD_SCALE, 38 * HD_SCALE, SAVE_BTN },
+	{ "Quit", "JUSTQTUP.BMP", "JUSTQTDN.BMP", "JUSTQTUP.BMP", "JUSTQTUP.BMP", 220 * HD_SCALE, 237 * HD_SCALE, 200 * HD_SCALE, 38 * HD_SCALE, QUIT_BTN },
+	{ "Cancel", "PLAYUP.BMP", "PLAYDN.BMP", "PLAYUP.BMP", "PLAYUP.BMP", 220 * HD_SCALE, 284 * HD_SCALE, 200 * HD_SCALE, 38 * HD_SCALE, CANCEL_BTN }
 };
 
 CBagQuitDialog::CBagQuitDialog() {

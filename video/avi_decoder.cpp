@@ -656,8 +656,29 @@ bool AVIDecoder::shouldQueueAudio(TrackStatus& status) {
 	if (videoTrack->endOfTrack())
 		return true;
 
-	// Being three frames ahead should be enough for any video.
-	return ((AVIAudioTrack *)status.track)->getCurChunk() < (uint32)(videoTrack->getCurFrame() + 3);
+	// Use time-based buffering: maintain at least 500ms of audio queued ahead
+	// of the current video playback position.  This handles AVIs where audio
+	// chunks are shorter than one video frame (common with raw-video AVIs at
+	// low frame rates), where a fixed frame-count lookahead would deplete the
+	// buffer faster than it is refilled.
+	const AVIAudioTrack *audTrack = (AVIAudioTrack *)status.track;
+	uint32 chunkDurMs = audTrack->getChunkDurationMs();
+	if (chunkDurMs == 0) {
+		// Duration unknown yet (no chunks queued); fall back to frame-count check.
+		return audTrack->getCurChunk() < (uint32)(videoTrack->getCurFrame() + 3);
+	}
+
+	// Approximate current playback position in ms from the video frame counter.
+	int curFrame = videoTrack->getCurFrame();
+	uint32 curTimeMs = 0;
+	if (curFrame > 0) {
+		// getNextFrameStartTime() == (curFrame+1) * frameDurMs
+		uint32 nextMs = videoTrack->getNextFrameStartTime();
+		curTimeMs = (uint32)((uint64)nextMs * curFrame / (curFrame + 1));
+	}
+
+	uint32 queuedMs = audTrack->getCurChunk() * chunkDurMs;
+	return queuedMs < curTimeMs + 500; // keep 500ms of audio buffered
 }
 
 bool AVIDecoder::rewind() {
@@ -1137,7 +1158,8 @@ AVIDecoder::AVIAudioTrack::AVIAudioTrack(const AVIStreamHeader &streamHeader, co
 		_wvInfo(waveFormat),
 		_audioStream(0),
 		_packetStream(0),
-		_curChunk(0) {
+		_curChunk(0),
+		_chunkDurMs(0) {
 }
 
 AVIDecoder::AVIAudioTrack::~AVIAudioTrack() {
@@ -1145,6 +1167,15 @@ AVIDecoder::AVIAudioTrack::~AVIAudioTrack() {
 }
 
 void AVIDecoder::AVIAudioTrack::queueSound(Common::SeekableReadStream *stream) {
+	// Compute chunk duration on first packet — used by shouldQueueAudio.
+	if (_chunkDurMs == 0 && stream) {
+		uint32 bytesPerSampleFrame = (uint32)_audsHeader.sampleSize * _wvInfo.channels;
+		if (bytesPerSampleFrame > 0 && _wvInfo.samplesPerSec > 0) {
+			_chunkDurMs = (uint32)((uint64)stream->size() * 1000 /
+			              ((uint64)_wvInfo.samplesPerSec * bytesPerSampleFrame));
+			if (_chunkDurMs == 0) _chunkDurMs = 1; // guard against very small chunks
+		}
+	}
 	if (_packetStream)
 		_packetStream->queuePacket(stream);
 	else

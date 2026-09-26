@@ -300,6 +300,10 @@ protected:
 		bool isRewindable() const { return true; }
 		bool rewind();
 
+		// Duration of one audio chunk in milliseconds (set on first queueSound call).
+		// Used by shouldQueueAudio for time-based buffering.
+		uint32 getChunkDurationMs() const { return _chunkDurMs; }
+
 	protected:
 		Audio::AudioStream *getAudioStream() const { return _audioStream; }
 
@@ -308,6 +312,7 @@ protected:
 		Audio::AudioStream *_audioStream;
 		Audio::PacketizedAudioStream *_packetStream;
 		uint32 _curChunk;
+		uint32 _chunkDurMs; // ms per audio chunk (computed from first chunk)
 	};
 
 	struct TrackStatus {

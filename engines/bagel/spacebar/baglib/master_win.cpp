@@ -78,7 +78,7 @@ int CBagMasterWin::_curCursor = 0;
 // CBagMasterWin
 //
 CBagMasterWin::CBagMasterWin() {
-	CBofRect screenRect(0, 0, 640 - 1, 480 - 1);
+	CBofRect screenRect(0, 0, 1280 - 1, 960 - 1);
 
 	const char *appName = "BAGEL Application";
 
@@ -88,7 +88,7 @@ CBagMasterWin::CBagMasterWin() {
 		appName = app->getAppName();
 	}
 
-	screenRect.setRect(0, 0, 640 - 1, 480 - 1);
+	screenRect.setRect(0, 0, 1280 - 1, 960 - 1);
 	_fadeIn = 0;
 	_gameWindow = nullptr;
 

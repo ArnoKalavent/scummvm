@@ -22,6 +22,7 @@
 #include "graphics/framelimiter.h"
 #include "graphics/palette.h"
 #include "graphics/paletteman.h"
+#include "video/avi_decoder.h"
 #include "video/smk_decoder.h"
 
 #include "bagel/spacebar/baglib/bagel.h"
@@ -221,8 +222,13 @@ void CBofApp::delCursor(int nIndex) {
 bool CBofApp::consolePlayVideo(const Common::Path &path) {
 	delete _consoleVideo;
 
-	_consoleVideo = new Video::SmackerDecoder();
-	_consoleVideo->setSoundType(Audio::Mixer::kSFXSoundType);
+	if (Common::String(path.baseName()).hasSuffixIgnoreCase(".avi")) {
+		_consoleVideo = new Video::AVIDecoder();
+	} else {
+		Video::SmackerDecoder *smk = new Video::SmackerDecoder();
+		smk->setSoundType(Audio::Mixer::kSFXSoundType);
+		_consoleVideo = smk;
+	}
 	if (_consoleVideo->loadFile(path)) {
 		_consoleVideo->start();
 		return true;

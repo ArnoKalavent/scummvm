@@ -21,6 +21,7 @@
 
 #include "bagel/spacebar/dialogs/restart_dialog.h"
 #include "bagel/spacebar/baglib/bagel.h"
+#include "bagel/spacebar/baglib/pan_window.h"
 #include "bagel/spacebar/baglib/button_object.h"
 #include "bagel/spacebar/baglib/master_win.h"
 #include "bagel/spacebar/boflib/std_keys.h"
@@ -47,8 +48,8 @@ struct ST_BUTTONS {
 };
 
 static const ST_BUTTONS g_stRestartButtons[NUM_RESTART_BTNS] = {
-	{ "Yes", "yesup.bmp", "yesdn.bmp", "yesup.bmp", "yesup.bmp", 194, 249, 120, 40, RESTART_BTN },
-	{ "Cancel", "cancelup.bmp", "canceldn.bmp", "cancelup.bmp", "cancelup.bmp", 324, 249, 120, 40, CANCEL_BTN }
+	{ "Yes", "yesup.bmp", "yesdn.bmp", "yesup.bmp", "yesup.bmp", 194 * HD_SCALE, 249 * HD_SCALE, 120 * HD_SCALE, 40 * HD_SCALE, RESTART_BTN },
+	{ "Cancel", "cancelup.bmp", "canceldn.bmp", "cancelup.bmp", "cancelup.bmp", 324 * HD_SCALE, 249 * HD_SCALE, 120 * HD_SCALE, 40 * HD_SCALE, CANCEL_BTN }
 };
 
 

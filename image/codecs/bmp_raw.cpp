@@ -28,7 +28,14 @@
 namespace Image {
 
 BitmapRawDecoder::BitmapRawDecoder(int width, int height, int bitsPerPixel, bool ignoreAlpha, bool flip) : Codec(),
-		_width(width), _height(height), _bitsPerPixel(bitsPerPixel), _ignoreAlpha(ignoreAlpha), _flip(flip)  {
+		_width(width), _bitsPerPixel(bitsPerPixel), _ignoreAlpha(ignoreAlpha), _flip(flip)  {
+	// Negative height means top-down storage (AVI/DIB convention).
+	// Flip the read direction so we store the surface top-down as well.
+	if (height < 0) {
+		height = -height;
+		_flip = !_flip;
+	}
+	_height = height;
 	_surface.create(_width, _height, getPixelFormat());
 }
 
@@ -108,13 +115,17 @@ const Graphics::Surface *BitmapRawDecoder::decodeFrame(Common::SeekableReadStrea
 		}
 #endif
 	} else {
-		byte *dst = (byte *)_surface.getBasePtr(0, _height - 1);
 		uint bpp = format.bytesPerPixel;
+		// _flip=true: top-down (data arrives row 0..N-1, write row 0..N-1)
+		// _flip=false (default): bottom-up BMP convention (data row 0 is bottom)
+		byte *dst = _flip ? (byte *)_surface.getBasePtr(0, 0)
+		                  : (byte *)_surface.getBasePtr(0, _height - 1);
+		const int pitch_step = _flip ? (int)_surface.pitch : -(int)_surface.pitch;
 
 		for (int i = 0; i < _height; i++) {
 			stream.read(dst, _width * bpp);
 			stream.skip(extraDataLength);
-			dst -= _surface.pitch;
+			dst += pitch_step;
 		}
 	}
 

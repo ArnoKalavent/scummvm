@@ -20,6 +20,7 @@
  */
 
 #include "bagel/spacebar/baglib/pan_bitmap.h"
+#include "bagel/spacebar/baglib/pan_window.h"
 #include "bagel/spacebar/baglib/bagel.h"
 #include "bagel/spacebar/baglib/paint_table.h"
 
@@ -68,7 +69,7 @@ CBagPanBitmap::CBagPanBitmap(const char *pszFileName, CBofPalette *pPalette, con
 
 	if (nW && nH) {
 		CBofRect xMaxViewSize(0, 0, nW - 1, nH - 1);
-		if (nW > 1000) {
+		if (nW > DEF_WIDTH + 1) {
 			xMaxViewSize.left = (long)(nW / MAX_DIV_VIEW);
 			_bPanorama = true;
 		}
@@ -188,7 +189,15 @@ ErrorCode CBagPanBitmap::paintWarped(CBofBitmap *pBmp, const CBofRect &dstRect, 
 			                   nRight + i,
 			                   nTop + (int)(*pSrcHeight * srcBottom));
 
-			pSrcBmp->paint(pBmp, &WndDstRect, &PanSrcRect);
+			// Use blitFrom directly with explicit inclusive→exclusive rect conversion.
+			// CBofRect uses inclusive right/bottom, but Common::Rect uses exclusive.
+			// The old pSrcBmp->paint() call went through CBofRect::operator Common::Rect()
+			// which copies right/bottom verbatim, making each 2-pixel strip appear 1 pixel
+			// wide to blitFromInner — leaving every other column unpainted (black lines).
+			((Graphics::ManagedSurface &)*pBmp).blitFrom(
+			    (Graphics::ManagedSurface &)*pSrcBmp,
+			    Common::Rect(PanSrcRect.left, PanSrcRect.top, PanSrcRect.right + 1, PanSrcRect.bottom + 1),
+			    Common::Rect(WndDstRect.left, WndDstRect.top, WndDstRect.right + 1, WndDstRect.bottom + 1));
 
 			WndDstRect.left = WndDstRect.right + 1;
 			WndDstRect.right = WndDstRect.right + nWidth;

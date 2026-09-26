@@ -24,7 +24,7 @@
 #define BAGEL_BOFLIB_GUI_MOVIE_H
 
 #include "graphics/managed_surface.h"
-#include "video/smk_decoder.h"
+#include "video/video_decoder.h"
 #include "bagel/boflib/error.h"
 #include "bagel/spacebar/boflib/gui/dialog.h"
 #include "bagel/boflib/rect.h"
@@ -39,7 +39,7 @@ public:
 	};
 protected:
 	Graphics::ManagedSurface *_pSbuf;
-	Video::SmackerDecoder *_pSmk;
+	Video::VideoDecoder *_pSmk;
 	bool _bEscCanStop;
 	bool _bLoop;
 	bool _bStretch;
@@ -98,7 +98,7 @@ public:
 	Graphics::ManagedSurface *getSmackBuffer() {
 		return _pSbuf;
 	}
-	Video::SmackerDecoder *getSmackMovie() {
+	Video::VideoDecoder *getSmackMovie() {
 		return _pSmk;
 	}
 };

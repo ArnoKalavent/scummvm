@@ -22,6 +22,7 @@
 #include "graphics/cursorman.h"
 #include "bagel/spacebar/dialogs/credits_dialog.h"
 #include "bagel/spacebar/dialogs/opt_window.h"
+#include "bagel/spacebar/baglib/pan_window.h"
 #include "bagel/spacebar/baglib/bagel.h"
 #include "bagel/spacebar/baglib/master_win.h"
 #include "bagel/boflib/file_functions.h"
@@ -49,23 +50,23 @@ struct ST_CREDITS {
 #define NUM_SCREENS 12
 
 #define MY_MASK_COLOR 1
-#define LINE_HEIGHT 24
-#define PIX_SCROLL_DY 1
+#define LINE_HEIGHT (24 * HD_SCALE)
+#define PIX_SCROLL_DY HD_SCALE
 
 static const ST_CREDITS g_cScreen[NUM_SCREENS] = {
-	// Background        Credit text    topLeft   BotRight  Delay   PointSize
-	{ "BARAREA.BMP",    "CREDITS1.TXT", 370,   6, 636, 150, 30,     20 },
-	{ "CILIA.BMP",      "CREDITS2.TXT",   6, 120, 310, 360, 10,     24 },
-	{ "AUDITON.BMP",    "CREDITS3.TXT", 320, 120, 636, 360, 10,     24 },
-	{ "CAST1.BMP",      "CAST1.TXT",      6, 120, 310, 360, 10,     24 },
-	{ "CAST2.BMP",      "CAST2.TXT",    376, 120, 636, 360, 10,     24 },
-	{ "CAST3.BMP",      "CAST3.TXT",      6, 120, 310, 360, 10,     24 },
-	{ "CAST4.BMP",      "CAST4.TXT",      6, 120, 290, 360, 10,     24 },
-	{ "VILDROID.BMP",   "CREDITS5.TXT", 394, 120, 636, 360, 10,     22 },
-	{ "ZZAZZL.BMP",     "CREDITS6.TXT",   6, 220, 284, 474, 10,     24 },
-	{ "SRAFFAN.BMP",    "CREDITS7.TXT", 352, 310, 636, 474, 10,     24 },
-	{ "FLEEBIX.BMP",    "CREDITS8.TXT", 466, 230, 636, 474, 10,     18 },
-	{ "TRISECKS.BMP",   "CREDITS9.TXT",   6, 374, 636, 474, 10,     24 }
+	// Background        Credit text    topLeft              BotRight             Delay   PointSize
+	{ "BARAREA.BMP",    "CREDITS1.TXT", 370 * HD_SCALE,   6 * HD_SCALE, 636 * HD_SCALE, 150 * HD_SCALE, 30,     20 * HD_SCALE },
+	{ "CILIA.BMP",      "CREDITS2.TXT",   6 * HD_SCALE, 120 * HD_SCALE, 310 * HD_SCALE, 360 * HD_SCALE, 10,     24 * HD_SCALE },
+	{ "AUDITON.BMP",    "CREDITS3.TXT", 320 * HD_SCALE, 120 * HD_SCALE, 636 * HD_SCALE, 360 * HD_SCALE, 10,     24 * HD_SCALE },
+	{ "CAST1.BMP",      "CAST1.TXT",      6 * HD_SCALE, 120 * HD_SCALE, 310 * HD_SCALE, 360 * HD_SCALE, 10,     24 * HD_SCALE },
+	{ "CAST2.BMP",      "CAST2.TXT",    376 * HD_SCALE, 120 * HD_SCALE, 636 * HD_SCALE, 360 * HD_SCALE, 10,     24 * HD_SCALE },
+	{ "CAST3.BMP",      "CAST3.TXT",      6 * HD_SCALE, 120 * HD_SCALE, 310 * HD_SCALE, 360 * HD_SCALE, 10,     24 * HD_SCALE },
+	{ "CAST4.BMP",      "CAST4.TXT",      6 * HD_SCALE, 120 * HD_SCALE, 290 * HD_SCALE, 360 * HD_SCALE, 10,     24 * HD_SCALE },
+	{ "VILDROID.BMP",   "CREDITS5.TXT", 394 * HD_SCALE, 120 * HD_SCALE, 636 * HD_SCALE, 360 * HD_SCALE, 10,     22 * HD_SCALE },
+	{ "ZZAZZL.BMP",     "CREDITS6.TXT",   6 * HD_SCALE, 220 * HD_SCALE, 284 * HD_SCALE, 474 * HD_SCALE, 10,     24 * HD_SCALE },
+	{ "SRAFFAN.BMP",    "CREDITS7.TXT", 352 * HD_SCALE, 310 * HD_SCALE, 636 * HD_SCALE, 474 * HD_SCALE, 10,     24 * HD_SCALE },
+	{ "FLEEBIX.BMP",    "CREDITS8.TXT", 466 * HD_SCALE, 230 * HD_SCALE, 636 * HD_SCALE, 474 * HD_SCALE, 10,     18 * HD_SCALE },
+	{ "TRISECKS.BMP",   "CREDITS9.TXT",   6 * HD_SCALE, 374 * HD_SCALE, 636 * HD_SCALE, 474 * HD_SCALE, 10,     24 * HD_SCALE }
 };
 
 static bool g_b1 = false;

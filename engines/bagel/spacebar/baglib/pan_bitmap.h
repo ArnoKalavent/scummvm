@@ -76,7 +76,7 @@ public:
 	CBofRect getWarpSrcRect();
 	CBofPoint warpedPoint(CBofPoint &xPoint);
 
-	const CBofRect getMaxView(CBofSize s = CBofSize(640, 480));
+	const CBofRect getMaxView(CBofSize s = CBofSize(1280, 960));
 
 	void setCorrWidth(int nWidth, bool bUpdate = true);
 

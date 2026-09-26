@@ -20,6 +20,8 @@
  */
 
 #include "graphics/cursorman.h"
+#include "video/avi_decoder.h"
+#include "video/smk_decoder.h"
 
 #include "bagel/boflib/string.h"
 #include "bagel/spacebar/boflib/gui/movie.h"
@@ -95,8 +97,13 @@ bool CBofMovie::openMovie(const char *sFilename) {
 	if (_pSmk) {
 		closeMovie();
 	}
-	_pSmk = new Video::SmackerDecoder();
-	_pSmk->setSoundType(Audio::Mixer::kSFXSoundType);
+	if (Common::String(sFilename).hasSuffixIgnoreCase(".avi")) {
+		_pSmk = new Video::AVIDecoder();
+	} else {
+		Video::SmackerDecoder *smk = new Video::SmackerDecoder();
+		smk->setSoundType(Audio::Mixer::kSFXSoundType);
+		_pSmk = smk;
+	}
 
 	if (!_pSmk->loadFile(sFilename)) {
 		// Opened failed
@@ -129,7 +136,9 @@ bool CBofMovie::openMovie(const char *sFilename) {
 	// Smack the current frame into the buffer
 	const Graphics::Surface *frame = _pSmk->decodeNextFrame();
 	if (frame) {
-		_pSbuf->setPalette(_pSmk->getPalette(), 0, 256);
+		const byte *pal = _pSmk->getPalette();
+		if (pal)
+			_pSbuf->setPalette(pal, 0, 256);
 		_pSbuf->blitFrom(*frame, _srcRect, _dstRect);
 	}
 
@@ -323,7 +332,7 @@ uint32 CBofMovie::getFrame() {
 bool CBofMovie::setFrame(uint32 dwFrameNum) {
 	if (_pSmk) {
 		dwFrameNum = CLIP<uint32>(dwFrameNum, 0, _pSmk->getFrameCount() - 1);
-		_pSmk->forceSeekToFrame(dwFrameNum);
+		_pSmk->seekToFrame(dwFrameNum);
 		return true;
 	}
 

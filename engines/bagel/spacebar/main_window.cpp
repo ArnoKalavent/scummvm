@@ -75,8 +75,11 @@ CMainWindow::~CMainWindow() {
 	}
 }
 
-#define PAN_WIDTH 640
-#define PAN_HEIGHT 480
+// The pan window must cover the full game screen so that UI elements
+// (HUMYOU icon, PDA, etc.) rendered outside the panoramic viewport remain
+// visible.  DEF_WIDTH/DEF_HEIGHT are the game resolution minus 1 (1279/959).
+#define PAN_WIDTH  (DEF_WIDTH  + 1)   // 1280
+#define PAN_HEIGHT (DEF_HEIGHT + 1)   // 960
 
 ErrorCode CMainWindow::attach() {
 	CBofRect tmpRect(0, 0, PAN_WIDTH - 1, PAN_HEIGHT - 1);
@@ -157,7 +160,10 @@ ErrorCode CMainWindow::attach() {
 				_pWieldBmp->attach();
 
 			if (_pWieldBmp->getRect().isRectEmpty()) {
-				CBofRect r(0, 380, 0 + 100 - 1, 380 + 100 - 1);
+				// Original position was (0,380) for a 640×480 / 480×360-pan screen.
+				// At 2× resolution (1280×960 / 960×720-pan) the icon must sit below
+				// the panoramic area, so scale y by 2: 380→760.
+				CBofRect r(0, 760, 0 + 200 - 1, 760 + 200 - 1);
 				_pWieldBmp->setRect(r);
 				r = getClientRect();
 			}

@@ -34,14 +34,17 @@ namespace SpaceBar {
 
 #define BOFCURS 1
 
-#define DEF_WIDTH 639
-#define DEF_HEIGHT 479
+#define DEF_WIDTH 1279
+#define DEF_HEIGHT 959
+
+// HD scale factor: 2 at 1280x960, 1 at original 640x480
+#define HD_SCALE ((DEF_WIDTH + 1) / 640)
 
 #define EVAL_EXPR 303
 
 // The height and width of the pan area
-#define PAN_AREA_WIDTH 480
-#define PAN_AREA_HEIGHT 360
+#define PAN_AREA_WIDTH 960
+#define PAN_AREA_HEIGHT 720
 
 //
 // CBagPanWindow -

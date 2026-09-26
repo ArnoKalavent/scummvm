@@ -21,6 +21,7 @@
 
 #include "bagel/spacebar/dialogs/start_dialog.h"
 #include "bagel/spacebar/baglib/bagel.h"
+#include "bagel/spacebar/baglib/pan_window.h"
 #include "bagel/spacebar/baglib/button_object.h"
 #include "bagel/boflib/sound.h"
 #include "bagel/spacebar/dialogs/opt_window.h"
@@ -44,9 +45,9 @@ struct ST_BUTTONS {
 };
 
 static const ST_BUTTONS g_stStartButtons[NUM_START_BTNS] = {
-	{ "Restore", "start1up.bmp", "start1dn.bmp", "start1gr.bmp", "start1gr.bmp", 110, 396, 120, 40, RESTORE_BTN },
-	{ "Restart", "start2up.bmp", "start2dn.bmp", "start2up.bmp", "start2up.bmp", 238, 416, 120, 40, RESTART_BTN },
-	{ "Quit", "start3up.bmp", "start3dn.bmp", "start3up.bmp", "start3up.bmp", 366, 436, 120, 40, QUIT_BTN }
+	{ "Restore", "start1up.bmp", "start1dn.bmp", "start1gr.bmp", "start1gr.bmp", 110 * HD_SCALE, 396 * HD_SCALE, 120 * HD_SCALE, 40 * HD_SCALE, RESTORE_BTN },
+	{ "Restart", "start2up.bmp", "start2dn.bmp", "start2up.bmp", "start2up.bmp", 238 * HD_SCALE, 416 * HD_SCALE, 120 * HD_SCALE, 40 * HD_SCALE, RESTART_BTN },
+	{ "Quit", "start3up.bmp", "start3dn.bmp", "start3up.bmp", "start3up.bmp", 366 * HD_SCALE, 436 * HD_SCALE, 120 * HD_SCALE, 40 * HD_SCALE, QUIT_BTN }
 };
 
 

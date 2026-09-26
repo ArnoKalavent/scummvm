@@ -21,6 +21,7 @@
 
 #include "bagel/spacebar/dialogs/next_cd_dialog.h"
 #include "bagel/spacebar/dialogs/opt_window.h"
+#include "bagel/spacebar/baglib/pan_window.h"
 #include "bagel/spacebar/baglib/cursor.h"
 #include "bagel/spacebar/baglib/bagel.h"
 #include "bagel/spacebar/boflib/std_keys.h"
@@ -57,7 +58,7 @@ void CBagNextCDDialog::onInitDialog() {
 	CBofBitmap *pDis = loadBitmap(buildSysDir("CDOKUP.BMP"), pPal);
 
 	_pButton->loadBitmaps(pUp, pDown, pFocus, pDis);
-	_pButton->create("NextCD", 77, 127, 60, 30, this, OK_BTN);
+	_pButton->create("NextCD", 77 * HD_SCALE, 127 * HD_SCALE, 60 * HD_SCALE, 30 * HD_SCALE, this, OK_BTN);
 	_pButton->show();
 
 	// Show System cursor

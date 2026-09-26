@@ -48,13 +48,13 @@ namespace SpaceBar {
 #define VOLUME_MAX      12
 #define VOLUME_DEFAULT  10
 
-#define CHECKBOX_WIDTH      20
-#define CHECKBOX_HEIGHT     20
+#define CHECKBOX_WIDTH      (20 * HD_SCALE)
+#define CHECKBOX_HEIGHT     (20 * HD_SCALE)
 
-#define FLYTHROUGHS_LEFT     41
-#define FLYTHROUGHS_TOP     151
-#define PANIMATIONS_LEFT     41
-#define PANIMATIONS_TOP     201
+#define FLYTHROUGHS_LEFT     (41 * HD_SCALE)
+#define FLYTHROUGHS_TOP     (151 * HD_SCALE)
+#define PANIMATIONS_LEFT     (41 * HD_SCALE)
+#define PANIMATIONS_TOP     (201 * HD_SCALE)
 
 // Button IDs
 //
@@ -87,15 +87,15 @@ struct ST_BUTTONS {
 };
 
 static const ST_BUTTONS g_stButtons[NUM_SYS_BUTTONS] = {
-	{ "Save",     "saveup.bmp",   "savedn.bmp",   "savegr.bmp",   "savegr.bmp",   490,  55, 120, 40, SAVE_ID },
-	{ "Restore",  "restorup.bmp", "restordn.bmp", "restorgr.bmp", "restorgr.bmp", 490, 110, 120, 40, RESTORE_ID },
-	{ "Restart",  "restarup.bmp", "restardn.bmp", "restarup.bmp", "restarup.bmp", 490, 165, 120, 40, RESTART_ID },
-	{ "Quit",     "quitup.bmp",   "quitdn.bmp",   "quitup.bmp",   "quitup.bmp",   490, 220, 120, 40, QUIT_ID },
+	{ "Save",     "saveup.bmp",   "savedn.bmp",   "savegr.bmp",   "savegr.bmp",   490 * HD_SCALE,  55 * HD_SCALE, 120 * HD_SCALE, 40 * HD_SCALE, SAVE_ID },
+	{ "Restore",  "restorup.bmp", "restordn.bmp", "restorgr.bmp", "restorgr.bmp", 490 * HD_SCALE, 110 * HD_SCALE, 120 * HD_SCALE, 40 * HD_SCALE, RESTORE_ID },
+	{ "Restart",  "restarup.bmp", "restardn.bmp", "restarup.bmp", "restarup.bmp", 490 * HD_SCALE, 165 * HD_SCALE, 120 * HD_SCALE, 40 * HD_SCALE, RESTART_ID },
+	{ "Quit",     "quitup.bmp",   "quitdn.bmp",   "quitup.bmp",   "quitup.bmp",   490 * HD_SCALE, 220 * HD_SCALE, 120 * HD_SCALE, 40 * HD_SCALE, QUIT_ID },
 
-	{ "Help",     "helpup.bmp",   "helpdn.bmp",   "helpup.bmp",   "helpup.bmp",   490, 275, 120, 40, HELP_ID },
-	{ "Credits",  "creditup.bmp", "creditdn.bmp", "creditup.bmp", "creditdn.bmp", 490, 330, 120, 40, CREDITS_ID },
-	{ "Okay",     "okayup.bmp",   "okaydn.bmp",   "okayup.bmp",   "okayup.bmp",   490, 385, 120, 40, OKAY_ID },
-	{ "Defaults", "dfaultup.bmp", "dfaultdn.bmp", "dfaultup.bmp", "dfaultup.bmp",  72, 360, 120, 40, DEFAULTS_ID }
+	{ "Help",     "helpup.bmp",   "helpdn.bmp",   "helpup.bmp",   "helpup.bmp",   490 * HD_SCALE, 275 * HD_SCALE, 120 * HD_SCALE, 40 * HD_SCALE, HELP_ID },
+	{ "Credits",  "creditup.bmp", "creditdn.bmp", "creditup.bmp", "creditdn.bmp", 490 * HD_SCALE, 330 * HD_SCALE, 120 * HD_SCALE, 40 * HD_SCALE, CREDITS_ID },
+	{ "Okay",     "okayup.bmp",   "okaydn.bmp",   "okayup.bmp",   "okayup.bmp",   490 * HD_SCALE, 385 * HD_SCALE, 120 * HD_SCALE, 40 * HD_SCALE, OKAY_ID },
+	{ "Defaults", "dfaultup.bmp", "dfaultdn.bmp", "dfaultup.bmp", "dfaultup.bmp",  72 * HD_SCALE, 360 * HD_SCALE, 120 * HD_SCALE, 40 * HD_SCALE, DEFAULTS_ID }
 };
 
 CBagOptWindow::CBagOptWindow() {
@@ -256,7 +256,7 @@ ErrorCode CBagOptWindow::attach() {
 
 	// Midi volume control
 	CBofRect cRect;
-	cRect.setRect(73, 48, 73 + 120 - 1, 48 + 20 - 1);
+	cRect.setRect(73 * HD_SCALE, 48 * HD_SCALE, 73 * HD_SCALE + 120 * HD_SCALE - 1, 48 * HD_SCALE + 20 * HD_SCALE - 1);
 	_pMidiVolumeScroll = new CBofScrollBar;
 	_pMidiVolumeScroll->create("", &cRect, this, MIDI_VOL_ID);
 	_pMidiVolumeScroll->loadBitmaps(szBuf1, szBuf2, szBuf3, szBuf4, szBuf5, szBuf6);
@@ -264,7 +264,7 @@ ErrorCode CBagOptWindow::attach() {
 	_pMidiVolumeScroll->show();
 
 	// Digital Audio volume control
-	cRect.setRect(73, 98, 73 + 120 - 1, 98 + 20 - 1);
+	cRect.setRect(73 * HD_SCALE, 98 * HD_SCALE, 73 * HD_SCALE + 120 * HD_SCALE - 1, 98 * HD_SCALE + 20 * HD_SCALE - 1);
 	_pWaveVolumeScroll = new CBofScrollBar;
 	_pWaveVolumeScroll->create("", &cRect, this, WAVE_VOL_ID);
 	_pWaveVolumeScroll->loadBitmaps(szBuf1, szBuf2, szBuf3, szBuf4, szBuf5, szBuf6);
@@ -272,7 +272,7 @@ ErrorCode CBagOptWindow::attach() {
 	_pWaveVolumeScroll->show();
 
 	// Pan Correction control
-	cRect.setRect(73, 268, 73 + 120 - 1, 268 + 20 - 1);
+	cRect.setRect(73 * HD_SCALE, 268 * HD_SCALE, 73 * HD_SCALE + 120 * HD_SCALE - 1, 268 * HD_SCALE + 20 * HD_SCALE - 1);
 	_pCorrectionScroll = new CBofScrollBar;
 	_pCorrectionScroll->create("", &cRect, this, CORRECTION_ID);
 	_pCorrectionScroll->loadBitmaps(szBuf1, szBuf2, szBuf3, szBuf4, szBuf5, szBuf6);
@@ -280,7 +280,7 @@ ErrorCode CBagOptWindow::attach() {
 	_pCorrectionScroll->show();
 
 	// Pan Speed control
-	cRect.setRect(73, 318, 73 + 120 - 1, 318 + 20 - 1);
+	cRect.setRect(73 * HD_SCALE, 318 * HD_SCALE, 73 * HD_SCALE + 120 * HD_SCALE - 1, 318 * HD_SCALE + 20 * HD_SCALE - 1);
 	_pPanSpeedScroll = new CBofScrollBar;
 	_pPanSpeedScroll->create("", &cRect, this, PANSPEED_ID);
 	_pPanSpeedScroll->loadBitmaps(szBuf1, szBuf2, szBuf3, szBuf4, szBuf5, szBuf6);

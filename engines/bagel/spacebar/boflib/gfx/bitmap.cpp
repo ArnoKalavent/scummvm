@@ -28,6 +28,7 @@
 #include "bagel/spacebar/boflib/app.h"
 #include "bagel/spacebar/boflib/file.h"
 #include "bagel/boflib/file_functions.h"
+#include "bagel/boflib/log.h"
 #include "bagel/boflib/misc.h"
 
 namespace Bagel {
@@ -157,6 +158,7 @@ ErrorCode CBofBitmap::loadBitmap(const char *pszFileName, CBofPalette *pPalette)
 	assert(isValidObject(this));
 	assert(pszFileName != nullptr);
 	assert(pPalette != nullptr);
+	logInfo(buildString("HD-BMP: loading %s", pszFileName));
 
 	// Release any previous bitmap info
 	releaseBitmap();

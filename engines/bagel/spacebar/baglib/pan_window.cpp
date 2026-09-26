@@ -139,7 +139,6 @@ CBofPalette *CBagPanWindow::setSlideBitmap(const CBofString &xSlideBmp, const CB
 			setBackdrop(pBackDropBitmap);
 
 			move(cRect.left, cRect.top);
-
 		}
 	}
 
@@ -323,8 +322,8 @@ ErrorCode CBagPanWindow::paintObjects(CBofList<CBagObject *> *list, CBofBitmap *
 							} else if (pObj->isAttached() &&                       // don't care if it's not running...
 							           (pCharObj->isStationary() == false) &&
 							           (pCharObj->getNumberOfLoops() != 0) &&     // Plays multiple or infinite (fly == -1)
-							           ((pObj->getRect().width() != 480) &&
-							            (pObj->getRect().height() != 360))) {
+							           ((pObj->getRect().width() != PAN_AREA_WIDTH) &&
+							            (pObj->getRect().height() != PAN_AREA_HEIGHT))) {
 
 								// Redraw everything inside of the closeup... but not the PDA...
 								// only want to redraw the closeup, not everything else.
@@ -693,9 +692,9 @@ void CBagPanWindow::onSize(uint32 nType, int cx, int cy) {
 	CBofRect cRect(vp, vs);
 
 	_cTopRect.setRect(cRect.left, 0, cRect.right, cRect.top);
-	_cBottomRect.setRect(cRect.left, cRect.bottom, cRect.right, 480 - 1);
+	_cBottomRect.setRect(cRect.left, cRect.bottom, cRect.right, 960 - 1);
 	_cLeftRect.setRect(0, cRect.top, cRect.left, cRect.bottom);
-	_cRightRect.setRect(cRect.right, cRect.top, 640 - 1, cRect.bottom);
+	_cRightRect.setRect(cRect.right, cRect.top, 1280 - 1, cRect.bottom);
 
 	setMovementRect(cRect);
 }

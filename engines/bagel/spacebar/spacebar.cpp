@@ -147,6 +147,14 @@ SpaceBarEngine::~SpaceBarEngine() {
 void SpaceBarEngine::initializePath(const Common::FSNode &gamePath) {
 	BagelEngine::initializePath(gamePath);
 	SearchMan.addDirectory("spacebar", gamePath.getChild("spacebar"), 0, 3);
+
+	// HD asset override: if extrapath is set, add it at priority 1 so its files
+	// are checked before the game's own data (priority 0).
+	if (ConfMan.hasKey("extrapath")) {
+		Common::Path epPath = ConfMan.getPath("extrapath");
+		Common::FSNode epNode(epPath);
+		SearchMan.addDirectory("hd_assets", epNode, 1, 4);
+	}
 }
 
 ErrorCode SpaceBarEngine::initialize() {
@@ -225,6 +233,17 @@ ErrorCode SpaceBarEngine::initialize() {
 				CBofString cString(SMK_LOGO1);
 				fixPathName(cString);
 
+				// HD override: prefer .AVI over .SMK if found in SearchMan
+				{
+					const int nLen = cString.getLength();
+					if (nLen > 4) {
+						Common::String cAvi(cString.getBuffer(), nLen - 4);
+						cAvi += ".AVI";
+						if (fileExists(cAvi.c_str())) {
+							cString = cAvi.c_str();
+						}
+					}
+				}
 				// Play the movie only if it exists
 				if (fileExists(cString.getBuffer())) {
 					bofPlayMovie(_masterWin, cString.getBuffer());
@@ -235,6 +254,17 @@ ErrorCode SpaceBarEngine::initialize() {
 
 				cString = SMK_LOGO2;
 				fixPathName(cString);
+				// HD override: prefer .AVI over .SMK if found in SearchMan
+				{
+					const int nLen = cString.getLength();
+					if (nLen > 4) {
+						Common::String cAvi(cString.getBuffer(), nLen - 4);
+						cAvi += ".AVI";
+						if (fileExists(cAvi.c_str())) {
+							cString = cAvi.c_str();
+						}
+					}
+				}
 				if (fileExists(cString.getBuffer())) {
 					bofPlayMovie(_masterWin, cString.getBuffer());
 					pBmp->paint(_masterWin, 0, 0);
@@ -245,7 +275,17 @@ ErrorCode SpaceBarEngine::initialize() {
 				// Use hi-res movie if user has a fast machine
 				cString = (getMachineSpeed() < 100) ? SMK_LOGO3EX : SMK_LOGO3;
 				fixPathName(cString);
-
+				// HD override: prefer .AVI over .SMK if found in SearchMan
+				{
+					const int nLen = cString.getLength();
+					if (nLen > 4) {
+						Common::String cAvi(cString.getBuffer(), nLen - 4);
+						cAvi += ".AVI";
+						if (fileExists(cAvi.c_str())) {
+							cString = cAvi.c_str();
+						}
+					}
+				}
 				if (fileExists(cString.getBuffer())) {
 					bofPlayMovie(_masterWin, cString.getBuffer());
 					pBmp->paint(_masterWin, 0, 0);
@@ -290,7 +330,7 @@ ErrorCode SpaceBarEngine::ShutDownSoundSystem() {
 
 Common::Error SpaceBarEngine::run() {
 	// Initialize graphics mode
-	initGraphics(640, 480, nullptr);
+	initGraphics(1280, 960, nullptr);
 
 	// Initialize systems
 	_screen = new Graphics::Screen();

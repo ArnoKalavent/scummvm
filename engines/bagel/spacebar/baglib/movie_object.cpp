@@ -104,7 +104,8 @@ bool CBagMovieObject::runObject() {
 		} nMovFileType;
 		const CBofString sBaseStr = sFileName.left(nExt);
 
-		if (sFileName.find(".smk") > 0 || sFileName.find(".SMK") > 0) {
+		if (sFileName.find(".smk") > 0 || sFileName.find(".SMK") > 0 ||
+		    sFileName.find(".avi") > 0 || sFileName.find(".AVI") > 0) {
 			nMovFileType = MovieFileType::MOVIE;
 		} else if (sFileName.find(SOUND_FILE_EXT_LOWER) > 0 || sFileName.find(SOUND_FILE_EXT_UPPER) > 0) {
 			nMovFileType = MovieFileType::SOUND;
@@ -112,6 +113,19 @@ bool CBagMovieObject::runObject() {
 			nMovFileType = MovieFileType::TEXT;
 		} else {
 			nMovFileType = MovieFileType::NONE;
+		}
+
+		// HD override: prefer .AVI over .SMK if found in SearchMan
+		if (nMovFileType == MovieFileType::MOVIE &&
+		    (sFileName.find(".smk") > 0 || sFileName.find(".SMK") > 0)) {
+			Common::String sAvi(sBaseStr.getBuffer());
+			sAvi += ".AVI";
+			if (fileExists(sAvi.c_str())) {
+				sFileName = sAvi.c_str();
+				logInfo(buildString("HD-VIDEO: AVI override -> %s", sFileName.getBuffer()));
+			} else {
+				logInfo(buildString("HD-VIDEO: no AVI, using SMK -> %s", sFileName.getBuffer()));
+			}
 		}
 
 		// Look for .SMK then .WAV, then .TXT
@@ -166,7 +180,7 @@ bool CBagMovieObject::runObject() {
 			}
 
 			if (_xDisplayType == dispType::EXAMINE) {
-				CBofRect r(160, 60, 480, 300);
+				CBofRect r(320, 120, 960, 600);
 
 				// Offset the rect for the movies to compensate for all screen sizes
 				r.offsetRect(((CBofWindow *)pMainWin)->getWindowRect().topLeft());
@@ -198,7 +212,8 @@ bool CBagMovieObject::runObject() {
 				}
 			} else {
 				bool bActivated = false;
-				CBofRect r(80, 10, 80 + 480 - 1, 10 + 360 - 1);
+				int vpX = (DEF_WIDTH + 1 - PAN_AREA_WIDTH) / 2;
+				CBofRect r(vpX, 10, vpX + PAN_AREA_WIDTH - 1, 10 + PAN_AREA_HEIGHT - 1);
 
 				// Offset the rect for the movies to compensate for all screen sizes
 				r.offsetRect(((CBofWindow *)pMainWin)->getWindowRect().topLeft());
@@ -245,7 +260,7 @@ bool CBagMovieObject::runObject() {
 				if (isFiltered) {
 					if (bZoomed) {
 						pNewWin = new CBofWindow();
-						pNewWin->create("BLACK", 0, 0, 640, 480, CBofApp::getApp()->getMainWindow(), 0);
+						pNewWin->create("BLACK", 0, 0, DEF_WIDTH + 1, DEF_HEIGHT + 1, CBofApp::getApp()->getMainWindow(), 0);
 						pNewWin->fillWindow(COLOR_BLACK);
 					}
 
@@ -288,7 +303,7 @@ bool CBagMovieObject::runObject() {
 
 						if (bZoomed && _xDisplayType != dispType::PDA_MSG) {
 							pNewWin = new CBofWindow();
-							pNewWin->create("BLACK", 0, 0, 640, 480, CBofApp::getApp()->getMainWindow(), 0);
+							pNewWin->create("BLACK", 0, 0, DEF_WIDTH + 1, DEF_HEIGHT + 1, CBofApp::getApp()->getMainWindow(), 0);
 							pNewWin->show();
 							pNewWin->fillWindow(COLOR_BLACK);
 						}
@@ -296,7 +311,7 @@ bool CBagMovieObject::runObject() {
 						// If playing a PDA message while the PDA is zoomed
 						if (bZoomed && _xDisplayType == dispType::PDA_MSG) {
 							// Then stretch it to fit into the PDA's viewscreen
-							r.setRect(24, 47, 28 + 600 - 1, 47 + 302 - 1);
+							r.setRect(48, 94, 56 + 1200 - 1, 94 + 604 - 1);
 							pMovie = new CBofMovie(CBofApp::getApp()->getMainWindow(), sFileName, &r, true);
 
 						} else {
