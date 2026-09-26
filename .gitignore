@@ -305,3 +305,8 @@ scummvm.prg
 
 #Ignore Python generated files
 __pycache__/
+
+# scratch space for the AI seats (task specs, review input, logs)
+.ai/
+*.seats-new
+*.seats-bak
